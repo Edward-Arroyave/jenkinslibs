@@ -5,9 +5,15 @@ def call(Map config) {
     def repoPath = config.repoPath
     def distPath = config.distPath
 
+    echo "📥 Instalando dependencias..."
+    dir(repoPath) {
+        sh 'npm install -f'
+    }
+    echo "✅ Dependencias instaladas"
+
     echo "⚙️ Compilando Angular..."
     dir(repoPath) {
-      sh 'node --max-old-space-size=9096 ./node_modules/.bin/ng build --aot --configuration production --optimization'
+        sh 'node --max-old-space-size=9096 ./node_modules/.bin/ng build --aot --configuration production --optimization'
     }
     echo "✅ Compilación completada"
 
