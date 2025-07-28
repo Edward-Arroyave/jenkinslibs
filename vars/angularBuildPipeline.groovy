@@ -7,7 +7,7 @@ def call(Map config) {
 
     echo "⚙️ Compilando Angular..."
     dir(repoPath) {
-        sh 'npx --max-old-space-size=9096 ng build --aot --configuration production --optimization'
+      sh 'node --max-old-space-size=9096 ./node_modules/.bin/ng build --aot --configuration production --optimization'
     }
     echo "✅ Compilación completada"
 
