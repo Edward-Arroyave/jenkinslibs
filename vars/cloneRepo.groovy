@@ -1,10 +1,10 @@
 def call(Map config) {
-    // Validaciones básicas
+
     if (!config.branch || !config.repoPath || !config.repoUrl) {
         error("❌ cloneRepo: 'branch', 'repoPath', and 'repoUrl' parameters are required.")
     }
 
-    echo "📦 Cloning repository:"
+    echo "📦 Cloning repository (shallow clone):"
     echo "   🟢 Branch: ${config.branch}"
     echo "   📁 Path: ${config.repoPath}"
     echo "   🔗 URL: ${config.repoUrl}"
@@ -13,6 +13,10 @@ def call(Map config) {
         checkout([
             $class: 'GitSCM',
             branches: [[name: "*/${config.branch}"]],
+            doGenerateSubmoduleConfigurations: false,
+            extensions: [
+                [$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true]
+            ],
             userRemoteConfigs: [[
                 url: config.repoUrl,
                 credentialsId: 'GITHUB'
@@ -20,5 +24,5 @@ def call(Map config) {
         ])
     }
 
-    echo "✅ Repository successfully cloned at: ${config.repoPath}"
+    echo "✅ Repository successfully shallow-cloned at: ${config.repoPath}"
 }
