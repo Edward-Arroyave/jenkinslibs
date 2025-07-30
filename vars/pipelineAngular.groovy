@@ -1,9 +1,17 @@
 
 def call(Map config) {
    
- if (!config.BUILD_FOLDER || !config.REPO_PATH || !config.DIST_PATH || !config.SITE_URL || !config.REPO_URL) {
-        error("❌ cloneRepo: 'branch', 'repoPath', and 'repoUrl' parameters are required.")
-    }
+def missingParams = []
+if (!config.BUILD_FOLDER) missingParams << 'BUILD_FOLDER'
+if (!config.REPO_PATH) missingParams << 'REPO_PATH'
+if (!config.DIST_PATH) missingParams << 'DIST_PATH'
+if (!config.SITE_URL) missingParams << 'SITE_URL'
+if (!config.REPO_URL) missingParams << 'REPO_URL'
+if (!config.AMBIENTE) missingParams << 'AMBIENTE'
+
+if (missingParams) {
+    error("❌ Error de configuración: Faltan los siguientes parámetros obligatorios: ${missingParams.join(', ')}")
+}
 
 pipeline {
     agent any
@@ -19,7 +27,7 @@ pipeline {
         stage('Validar ambiente') {
             steps {
                 script {
-                    echo "🔍 Validando ambiente: ${params.Ambiente}"
+                    echo "🔍 Validando ambiente: ${config.Ambiente}"
                     
                     switch (params.Ambiente) {
                         case 'Test':
@@ -35,7 +43,7 @@ pipeline {
                             BRANCH = 'main'
                             break
                         default:
-                            error "❌ ERROR: Ambiente no soportado: ${params.Ambiente}"
+                            error "❌ ERROR: Ambiente no soportado: ${config.Ambiente}"
                     }
 
                     echo "✅ Ambiente seleccionado: ${env.SERVER} | Rama: ${env.BRANCH}"
