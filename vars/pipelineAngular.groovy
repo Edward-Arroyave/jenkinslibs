@@ -1,5 +1,5 @@
 
-def call PipelineAngular(Map config) {
+def call(Map config) {
    
  if (!config.BUILD_FOLDER || !config.REPO_PATH || !config.DIST_PATH || !config.SITE_URL || !config.REPO_URL) {
         error("❌ cloneRepo: 'branch', 'repoPath', and 'repoUrl' parameters are required.")
