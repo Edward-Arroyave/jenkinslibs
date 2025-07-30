@@ -27,7 +27,7 @@ pipeline {
         stage('Validar ambiente') {
             steps {
                 script {
-                    echo "🔍 Validando ambiente: ${config.Ambiente}"
+                    echo "🔍 Validando ambiente: ${config.AMBIENTE}"
                     
                     switch (params.Ambiente) {
                         case 'Test':
@@ -43,10 +43,10 @@ pipeline {
                             BRANCH = 'main'
                             break
                         default:
-                            error "❌ ERROR: Ambiente no soportado: ${config.Ambiente}"
+                            error "❌ ERROR: Ambiente no soportado: ${config.AMBIENTE}"
                     }
 
-                    echo "✅ Ambiente seleccionado: ${env.SERVER} | Rama: ${env.BRANCH}"
+                    echo "✅ Ambiente seleccionado: ${config.SERVER} | Rama: ${config.BRANCH}"
                 }
             }
         }
