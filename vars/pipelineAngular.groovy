@@ -31,16 +31,16 @@ pipeline {
                     
                     switch (params.Ambiente) {
                         case 'Test':
-                            SERVER = 'SERVER_QC_TEST'
-                            BRANCH = 'Test'
+                            config.SERVER = 'SERVER_QC_TEST'
+                            config.BRANCH = 'Test'
                             break
                         case 'Demo':
-                            SERVER = 'SERVER_QC_DEMO'
-                            BRANCH = 'Demo'
+                            config.SERVER = 'SERVER_QC_DEMO'
+                            config.BRANCH = 'Demo'
                             break
                         case 'PRE_PRODUCCION':
-                            SERVER = 'SERVER_QC_PRE_PRODUCCION'
-                            BRANCH = 'main'
+                           config.SERVER = 'SERVER_QC_PRE_PRODUCCION'
+                            config.BRANCH = 'main'
                             break
                         default:
                             error "❌ ERROR: Ambiente no soportado: ${config.AMBIENTE}"
