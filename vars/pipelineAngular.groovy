@@ -60,24 +60,24 @@ def call(Map config) {
                 }
             }
 
-            stage('Copiar archivo .env si existe') {
-                when {
-                    expression { return config.ENV_FILE != null && config.ENV_FILE?.trim() }
-                }
-                steps {
-                    withCredentials([file(credentialsId: ${config.ENV_FILE}, variable: 'ENV_SECRET_PATH')]) {
-                    sh '''
-                        echo "📦 Copiando archivo .env desde la credencial..."
-                        cp $ENV_SECRET_PATH .env
+            // stage('Copiar archivo .env si existe') {
+            //     when {
+            //         expression { return config.ENV_FILE != null && config.ENV_FILE?.trim() }
+            //     }
+            //     steps {
+            //         withCredentials([file(credentialsId: ${config.ENV_FILE}, variable: 'ENV_SECRET_PATH')]) {
+            //         sh '''
+            //             echo "📦 Copiando archivo .env desde la credencial..."
+            //             cp $ENV_SECRET_PATH .env
 
-                        echo "🔍 Contenido del archivo .env:"
-                        cat .env
+            //             echo "🔍 Contenido del archivo .env:"
+            //             cat .env
 
-                         echo "✅ Variables disponibles en el entorno:"
-                     '''
-                    }
-                }
-            }
+            //              echo "✅ Variables disponibles en el entorno:"
+            //          '''
+            //         }
+            //     }
+            // }
 
             stage('Compilar Angular') {
                 steps {
