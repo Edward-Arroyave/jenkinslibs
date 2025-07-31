@@ -26,7 +26,7 @@ def call(Map config) {
                             noDefaultExcludes: false,
                             patternSeparator: '[, ]+',
                             removePrefix: distpath,
-                            sourceFiles: '${distpath}/**/*'
+                            sourceFiles: "${distpath}/**/*"
                         ]
                     ],
                     usePromotionTimestamp: false,
