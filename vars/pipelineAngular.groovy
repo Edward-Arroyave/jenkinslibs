@@ -64,6 +64,29 @@ pipeline {
                 }
             }
         }
+
+        stage('Copiar archivo .env si existe') {
+            when {
+                expression { return config.ENV_FILE != null && config.ENV_FILE?.trim() }
+            }
+            steps {
+                script {
+                    withCredentials([file(credentialsId: config.ENV_FILE, variable: 'ENV_SECRET_PATH')]) {
+                        sh '''
+                            echo "📦 Copiando archivo .env desde la credencial..."
+                            cp $ENV_SECRET_PATH .env
+
+                            echo "🔍 Contenido del archivo .env:"
+                            cat .env
+
+                            echo "✅ Variables disponibles en el entorno:"
+                            env
+                        '''
+                    }
+                }
+            }
+        }
+
     
         stage('Compilar Angular') {
             steps {
