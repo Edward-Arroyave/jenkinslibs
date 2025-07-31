@@ -7,9 +7,7 @@ if (!config.REPO_PATH) missingParams << 'REPO_PATH'
 if (!config.DIST_PATH) missingParams << 'DIST_PATH'
 if (!config.SITE_URL) missingParams << 'SITE_URL'
 if (!config.REPO_URL) missingParams << 'REPO_URL'
-if (!config.AMBIENTE) missingParams << 'AMBIENTE'
 if (!config.SERVER)   missingParams << 'SERVER'
-if (!config.BRANCH)   missingParams << 'BRANCH'
 if (!config.BRANCH)   missingParams << 'BRANCH'
 
 if (missingParams) {
