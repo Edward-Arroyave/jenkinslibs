@@ -8,7 +8,7 @@ def call(Map config) {
     def distpath = config.distpath
 
     echo "🚀 Desplegando al servidor FTP: ${server}"
-    echo "🚀 Desplegando al servidor FTP: ${distpath}"
+    echo "🚀 Carpeta de distribución: ${distpath}"
     dir(repoPath) {
         ftpPublisher(
             alwaysPublishFromMaster: false,
