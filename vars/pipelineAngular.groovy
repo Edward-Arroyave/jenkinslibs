@@ -8,6 +8,9 @@ if (!config.DIST_PATH) missingParams << 'DIST_PATH'
 if (!config.SITE_URL) missingParams << 'SITE_URL'
 if (!config.REPO_URL) missingParams << 'REPO_URL'
 if (!config.AMBIENTE) missingParams << 'AMBIENTE'
+if (!config.SERVER)   missingParams << 'SERVER'
+if (!config.BRANCH)   missingParams << 'BRANCH'
+if (!config.BRANCH)   missingParams << 'BRANCH'
 
 if (missingParams) {
     error("❌ Error de configuración: Faltan los siguientes parámetros obligatorios: ${missingParams.join(', ')}")
@@ -24,35 +27,7 @@ pipeline {
 
     stages {
 
-        stage('Validar ambiente') {
-            steps {
-                script {
-                    echo "🔍 Validando ambiente: ${config.AMBIENTE}"
-                    
-                    switch (params.Ambiente) {
-                        case 'Test':
-                            config.SERVER = 'SERVER_QC_TEST'
-                            config.BRANCH = 'Test'
-                            break
-                        case 'Demo':
-                            config.SERVER = 'SERVER_QC_DEMO'
-                            config.BRANCH = 'Demo'
-                            break
-                        case 'PRE_PRODUCCION':
-                           config.SERVER = 'SERVER_QC_PRE_PRODUCCION'
-                            config.BRANCH = 'main'
-                            break
-                        default:
-                            error "❌ ERROR: Ambiente no soportado: ${config.AMBIENTE}"
-                    }
-
-                    echo "✅ Ambiente seleccionado: ${config.SERVER} | Rama: ${config.BRANCH}"
-                }
-            }
-        }
-
-       
- 
+        
         stage('Clone Repository') {
             steps {
                 script {
@@ -72,16 +47,17 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: config.ENV_FILE, variable: 'ENV_SECRET_PATH')]) {
-                        sh '''
-                            echo "📦 Copiando archivo .env desde la credencial..."
-                            cp $ENV_SECRET_PATH .env
+                sh """
+                    echo "📦 Copiando archivo .env desde la credencial..."
+                    cp \$ENV_SECRET_PATH ${config.REPO_PATH}/.env
 
-                            echo "🔍 Contenido del archivo .env:"
-                            cat .env
+                    echo "🔍 Contenido del archivo .env:"
+                    cat ${config.REPO_PATH}/.env
 
-                            echo "✅ Variables disponibles en el entorno:"
-                            env
-                        '''
+                    echo "✅ Variables disponibles en el entorno:"
+                    env
+                """
+
                     }
                 }
             }
