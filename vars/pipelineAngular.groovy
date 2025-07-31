@@ -75,6 +75,7 @@ def call(Map config) {
 
                          echo "✅ Variables disponibles en el entorno:"
                      '''
+                    }
                 }
             }
 
