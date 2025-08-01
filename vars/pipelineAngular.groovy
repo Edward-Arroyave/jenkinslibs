@@ -10,6 +10,8 @@ if (!config.REPO_URL) missingParams << 'REPO_URL'
 if (!config.SERVER)   missingParams << 'SERVER'
 if (!config.BRANCH)   missingParams << 'BRANCH'
 if (!config.DIST_DIR)   missingParams << 'DIST_DIR'
+if (!config.NODE_VERSION)   missingParams << 'NODE_VERSION'
+
 
 if (missingParams) {
     error("❌ Error de configuración: Faltan los siguientes parámetros obligatorios: ${missingParams.join(', ')}")
@@ -19,7 +21,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs '18.19.0'
+        nodejs config.NODE_VERSION
     }
 
    
