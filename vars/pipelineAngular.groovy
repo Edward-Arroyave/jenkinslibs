@@ -42,15 +42,15 @@ pipeline {
        stage('Copiar archivo .env si existe') {
     steps {
         script {
-            echo "🔍 Verificando si se recibió el parámetro ENV_FILE: '${config.ENV_FILE}'"
+            echo "🔍 Verificando si se recibió el parámetro FILE_ENV: '${config.FILE_ENV}'"
             echo "📁 Ruta del repositorio: '${config.REPO_PATH}'"
 
-            // Verificar si ENV_FILE está definido y no está vacío
-            if (config.ENV_FILE?.trim()) {
-                echo "🔐 Se recibió ENV_FILE con valor: '${config.ENV_FILE}', se intentará copiar el archivo .env."
+            // Verificar si FILE_ENV está definido y no está vacío
+            if (config.FILE_ENV?.trim()) {
+                echo "🔐 Se recibió FILE_ENV con valor: '${config.FILE_ENV}', se intentará copiar el archivo .env."
 
                 try {
-                    withCredentials([file(credentialsId: config.ENV_FILE, variable: 'ENV_SECRET_PATH')]) {
+                    withCredentials([file(credentialsId: config.FILE_ENV, variable: 'ENV_SECRET_PATH')]) {
                         sh """
                             echo "📦 Copiando archivo .env desde la credencial..."
                             cp \$ENV_SECRET_PATH ${config.REPO_PATH}/.env
@@ -63,11 +63,11 @@ pipeline {
                         """
                     }
                 } catch (e) {
-                    error "❌ No se pudo encontrar o copiar el archivo .env desde la credencial '${config.ENV_FILE}'. Error: ${e.getMessage()}"
+                    error "❌ No se pudo encontrar o copiar el archivo .env desde la credencial '${config.FILE_ENV}'. Error: ${e.getMessage()}"
                 }
 
             } else {
-                echo "⚠️ No se recibió ENV_FILE. Se omite la copia del archivo .env."
+                echo "⚠️ No se recibió FILE_ENV. Se omite la copia del archivo .env."
             }
         }
     }
