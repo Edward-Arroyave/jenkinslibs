@@ -4,7 +4,7 @@ def call(Map config) {
     if (!config.distDir) error "Falta el parámetro obligatorio: distDir"
 
     echo "🚀 Desplegando al servidor FTP: ${config.server}"
-    echo "🚀 Carpeta de distribución: ${config.distDir}"
+    echo "📂 Carpeta de distribución: ${config.distDir}"
     dir(config.repoPath) {
         ftpPublisher(
             alwaysPublishFromMaster: false,
