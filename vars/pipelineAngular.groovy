@@ -40,6 +40,8 @@ pipeline {
         }
 
         stage('Copiar archivo .env si existe') {
+            echo "🔍 Verificando si existe el archivo .env en las credenciales ${ENV_FILE}"
+         
             when {
                 expression { return config.ENV_FILE != null && config.ENV_FILE?.trim() }
             }
