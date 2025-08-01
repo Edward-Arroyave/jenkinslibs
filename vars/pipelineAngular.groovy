@@ -39,30 +39,40 @@ pipeline {
             }
         }
 
-        stage('Copiar archivo .env si existe') {
-            echo "🔍 Verificando si existe el archivo .env en las credenciales ${ENV_FILE}"
-         
-            when {
-                expression { return config.ENV_FILE != null && config.ENV_FILE?.trim() }
-            }
-            steps {
-                script {
+       stage('Copiar archivo .env si existe') {
+    steps {
+        script {
+            echo "🔍 Verificando si se recibió el parámetro ENV_FILE: '${config.ENV_FILE}'"
+            echo "📁 Ruta del repositorio: '${config.REPO_PATH}'"
+
+            // Verificar si ENV_FILE está definido y no está vacío
+            if (config.ENV_FILE?.trim()) {
+                echo "🔐 Se recibió ENV_FILE con valor: '${config.ENV_FILE}', se intentará copiar el archivo .env."
+
+                try {
                     withCredentials([file(credentialsId: config.ENV_FILE, variable: 'ENV_SECRET_PATH')]) {
-                sh """
-                    echo "📦 Copiando archivo .env desde la credencial..."
-                    cp \$ENV_SECRET_PATH ${config.REPO_PATH}/.env
+                        sh """
+                            echo "📦 Copiando archivo .env desde la credencial..."
+                            cp \$ENV_SECRET_PATH ${config.REPO_PATH}/.env
 
-                    echo "🔍 Contenido del archivo .env:"
-                    cat ${config.REPO_PATH}/.env
+                            echo "🔍 Contenido del archivo .env:"
+                            cat ${config.REPO_PATH}/.env
 
-                    echo "✅ Variables disponibles en el entorno:"
-                    env
-                """
-
+                            echo "✅ Variables disponibles en el entorno:"
+                            env
+                        """
                     }
+                } catch (e) {
+                    error "❌ No se pudo encontrar o copiar el archivo .env desde la credencial '${config.ENV_FILE}'. Error: ${e.getMessage()}"
                 }
+
+            } else {
+                echo "⚠️ No se recibió ENV_FILE. Se omite la copia del archivo .env."
             }
         }
+    }
+}
+
 
     
         stage('Compilar Angular') {
