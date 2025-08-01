@@ -73,8 +73,6 @@ pipeline {
     }
 }
 
-
-    
         stage('Compilar Angular') {
             steps {
                 script {
