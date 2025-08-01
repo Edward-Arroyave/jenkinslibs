@@ -2,14 +2,14 @@
 def call(Map config) {
    
 def missingParams = []
-if (!config.BUILD_FOLDER) missingParams << 'BUILD_FOLDER'
-if (!config.REPO_PATH) missingParams << 'REPO_PATH'
-if (!config.DIST_PATH) missingParams << 'DIST_PATH'
-if (!config.SITE_URL) missingParams << 'SITE_URL'
-if (!config.REPO_URL) missingParams << 'REPO_URL'
-if (!config.SERVER)   missingParams << 'SERVER'
-if (!config.BRANCH)   missingParams << 'BRANCH'
-if (!config.DIST_DIR)   missingParams << 'DIST_DIR'
+if (!config.BUILD_FOLDER)  missingParams << 'BUILD_FOLDER'
+if (!config.REPO_PATH)     missingParams << 'REPO_PATH'
+if (!config.DIST_PATH)     missingParams << 'DIST_PATH'
+if (!config.SITE_URL)      missingParams << 'SITE_URL'
+if (!config.REPO_URL)      missingParams << 'REPO_URL'
+if (!config.SERVER)        missingParams << 'SERVER'
+if (!config.BRANCH)        missingParams << 'BRANCH'
+if (!config.DIST_DIR)      missingParams << 'DIST_DIR'
 
 if (missingParams) {
     error("❌ Error de configuración: Faltan los siguientes parámetros obligatorios: ${missingParams.join(', ')}")
