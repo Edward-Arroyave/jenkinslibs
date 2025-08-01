@@ -22,5 +22,5 @@ def call(Map config) {
         error "❌ ERROR: No se encontró la carpeta compilada en ${distPath}"
     }
     echo "✅ Carpeta compilada encontrada"
-}
+} 
 
