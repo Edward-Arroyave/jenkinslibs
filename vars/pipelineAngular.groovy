@@ -46,6 +46,7 @@ pipeline {
                     copyDotenvIfPresent(
                         REPO_PATH: config.REPO_PATH,
                         FILE_ENV: config.FILE_ENV
+                        NG_APP_VERSION: config.NG_APP_VERSION
                     )
                 }
             }
