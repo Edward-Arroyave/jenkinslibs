@@ -33,10 +33,10 @@ def call(Map config) {
 
         // Modificar o agregar la variable NG_APP_VERSION
         sh """
-            sed -i 's/^NG_APP_VERSION=.*/NG_APP_VERSION=${config.NG_APP_VERSION}/' ${config.REPO_PATH}/.env || echo "NG_APP_VERSION=${config.NG_APP_VERSION}" >> ${config.REPO_PATH}/.env
+            sed -i -E 's/^\\s*NG_APP_VERSION\\s*=.*/NG_APP_VERSION=${config.NG_APP_VERSION}/' ${config.REPO_PATH}/.env || echo 'NG_APP_VERSION=${config.NG_APP_VERSION}' >> ${config.REPO_PATH}/.env
 
             echo '🔎 [VERIFICACIÓN] NG_APP_VERSION actual en el .env:'
-            grep '^NG_APP_VERSION=' ${config.REPO_PATH}/.env || echo 'NG_APP_VERSION no encontrado'
+            grep -E '^\\s*NG_APP_VERSION\\s*=' ${config.REPO_PATH}/.env || echo 'NG_APP_VERSION no encontrado'
         """
 
         echo "✅ [ACTUALIZACIÓN] NG_APP_VERSION actualizado correctamente."
