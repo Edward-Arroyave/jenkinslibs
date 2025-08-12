@@ -1,14 +1,32 @@
+/**
+ * Pipeline step para clonar un repositorio Git de forma superficial (shallow clone).
+ *
+ * @param config Map con configuración requerida:
+ *   - branch (String): Rama del repositorio que se va a clonar.
+ *   - repoPath (String): Ruta local donde se clonará el repositorio.
+ *   - repoUrl (String): URL del repositorio Git.
+ *
+ * Requisitos:
+ *   - Credenciales con ID 'GITHUB' configuradas en Jenkins para acceso al repositorio.
+ *
+ * Características:
+ *   - Clonación superficial con profundidad 1 para acelerar el proceso.
+ *   - No clona submódulos.
+ */
 def call(Map config) {
 
+    // Validar que los parámetros obligatorios estén presentes
     if (!config.branch || !config.repoPath || !config.repoUrl) {
         error("❌ cloneRepo: 'branch', 'repoPath', and 'repoUrl' parameters are required.")
     }
 
+    // Mostrar información del proceso de clonación
     echo "📦 Cloning repository (shallow clone):"
     echo "   🟢 Branch: ${config.branch}"
     echo "   📁 Path: ${config.repoPath}"
     echo "   🔗 URL: ${config.repoUrl}"
 
+    // Cambiar al directorio destino y ejecutar la clonación
     dir(config.repoPath) {
         checkout([
             $class: 'GitSCM',
@@ -19,10 +37,11 @@ def call(Map config) {
             ],
             userRemoteConfigs: [[
                 url: config.repoUrl,
-                credentialsId: 'GITHUB'
+                credentialsId: 'GITHUB' // Credenciales configuradas en Jenkins
             ]]
         ])
     }
 
+    // Confirmación de éxito
     echo "✅ Repository successfully shallow-cloned at: ${config.repoPath}"
 }
