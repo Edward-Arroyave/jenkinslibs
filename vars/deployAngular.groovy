@@ -1,4 +1,4 @@
-este es el flujo que realiza el despliegue:
+// este es el flujo que realiza el despliegue:
 /**
  * Pipeline step para desplegar archivos a un servidor FTP usando ftpPublisher.
  *
