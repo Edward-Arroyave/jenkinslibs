@@ -1,3 +1,4 @@
+este es el flujo que realiza el despliegue:
 /**
  * Pipeline step para desplegar archivos a un servidor FTP usando ftpPublisher.
  *
@@ -16,51 +17,41 @@ def call(Map config) {
     if (!config.server) error "Falta el parámetro obligatorio: server"
     if (!config.distDir) error "Falta el parámetro obligatorio: distDir"
 
-    // Normalizar separadores de ruta
-    def normalizedDistDir = config.distDir.replace("\\", "/").replaceAll('^\\./', '')
-    def fullDistPath = "${config.repoPath}/${normalizedDistDir}".replace("\\", "/")
-
-    // Validar que el directorio existe
-    if (!fileExists(fullDistPath)) {
-        error "❌ El directorio de distribución no existe: ${fullDistPath}"
-    }
-
-    // Mensajes informativos
+    // Mensajes informativos del despliegue
     echo "🚀 Desplegando al servidor FTP: ${config.server}"
-    echo "📂 Carpeta de distribución (normalizada): ${normalizedDistDir}"
+    echo "📂 Carpeta de distribución: ${config.distDir}"
 
     // Cambiar directorio de trabajo al repoPath indicado
     dir(config.repoPath) {
-        try {
-            ftpPublisher(
-                alwaysPublishFromMaster: false,
-                continueOnError: false,
-                failOnError: true, // Si hay error en FTP, falla el pipeline
-                publishers: [
-                    [
-                        configName: config.server,
-                        transfers: [
-                            [
-                                asciiMode: false,
-                                cleanRemote: false,
-                                excludes: '',
-                                flatten: false,
-                                makeEmptyDirs: false,
-                                noDefaultExcludes: false,
-                                patternSeparator: '[, ]+',
-                                removePrefix: normalizedDistDir, // Prefijo exacto a eliminar
-                                sourceFiles: "${normalizedDistDir}/**/*"
-                            ]
-                        ],
-                        usePromotionTimestamp: false,
-                        useWorkspaceInPromotion: false,
-                        verbose: true
-                    ]
+        // Ejecutar la publicación FTP con configuración detallada
+        ftpPublisher(
+            alwaysPublishFromMaster: false, // No publicar siempre desde master
+            continueOnError: false,          // No continuar si hay errores
+            failOnError: false,              // No fallar el build si hay error en FTP (puedes ajustar)
+            publishers: [
+                [
+                    configName: config.server, // Nombre del servidor FTP configurado en Jenkins
+                    transfers: [
+                        [
+                            asciiMode: false,         // No usar modo ASCII, subir binario
+                            cleanRemote: false,       // No limpiar carpeta remota antes de subir
+                            excludes: '',             // No excluir archivos
+                            flatten: false,           // Mantener estructura de carpetas
+                            makeEmptyDirs: false,     // No crear carpetas vacías en remoto
+                            noDefaultExcludes: false, // Usar exclusiones por defecto
+                            patternSeparator: '[, ]+', // Separador para patrones de archivos
+                            removePrefix: config.distDir, // Remover este prefijo de la ruta al subir
+                            sourceFiles: "${config.distDir}/**/*" // Archivos a subir
+                        ]
+                    ],
+                    usePromotionTimestamp: false, // No usar timestamp de promoción
+                    useWorkspaceInPromotion: false, // No usar el workspace en promoción
+                    verbose: true              // Mostrar logs detallados de la transferencia
                 ]
-            )
-            echo "✅ Despliegue completado correctamente"
-        } catch (err) {
-            error "❌ Error en despliegue FTP: ${err.getMessage()}"
-        }
+            ]
+        )
     }
+
+    // Mensaje de éxito
+    echo "✅ Despliegue completado"
 }
