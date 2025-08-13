@@ -1,10 +1,8 @@
 // File name: sendSuccessNotification.groovy
 
 def call (Map config) {
-    def messageText = "✅ Successful deployment of *${config.productName}* at ${new Date().format("HH:mm:ss")}"
-
+    
     office365ConnectorSend(
-        webhookUrl: config.webhookUrl,
         status: 'Failure',
         message: messageText,
         adaptiveCards: true,
@@ -16,7 +14,7 @@ def call (Map config) {
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
         ]
-      
-    
+
+
     )
 }
