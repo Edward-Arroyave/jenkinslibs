@@ -82,13 +82,7 @@ def call(Map config) {
             success {
                 echo '🎉 DESPLIEGUE FINALIZADO CON ÉXITO'
 
-               
-            }
-            failure {
-                echo '💥 ERROR DURANTE EL DESPLIEGUE'
-            }
-            always {
-                script {
+                  script {
                     sendSuccessNotification([
                         webhookUrl: 'https://ithealthannar.webhook.office.com/webhookb2/c54248da-6d3a-4414-92ca-c1dc7e652a8f@f032bfba-2704-407e-9848-b5e307857e2a/IncomingWebhook/717629d5740b4992aa52b1a7f1154784/c25693fe-5b81-416e-af0d-e0cfccdb6e77/V2KitHF-N0Y-QSJkaG0DSP6WHs7L95RUnvZhqBi637Jsc1',
                         productName: env.PRODUCT_NAME,
@@ -98,6 +92,13 @@ def call(Map config) {
                         buildNumber: env.BUILD_NUMBER,
                         buildUrl: env.BUILD_URL
                     ])
+            }
+            failure {
+                echo '💥 ERROR DURANTE EL DESPLIEGUE'
+            }
+            always {
+                script {
+                                  cleanWs()
                 }
             }
         }
