@@ -1,27 +1,18 @@
 def call(Map config) {
 
-   // Calcular duración en milisegundos
-def startMillis = currentBuild.getStartTimeInMillis()
-def endMillis = currentBuild.getTimeInMillis()
-def durationMillis = endMillis - startMillis
+    // Obtener duración real del build en milisegundos
+    def durationMillis = currentBuild.duration ?: (currentBuild.getTimeInMillis() - currentBuild.getStartTimeInMillis())
 
-// Convertir a segundos como double
-def totalSeconds = durationMillis / 1000.0
+    // Convertir a H.M.S
+    def totalSeconds = durationMillis / 1000.0
+    def hours = Math.floor(totalSeconds / 3600).toInteger()
+    def minutes = Math.floor((totalSeconds - (hours * 3600)) / 60).toInteger()
+    def seconds = totalSeconds - (hours * 3600) - (minutes * 60)
 
-// Calcular horas, minutos y segundos sin usar %
-def hours = Math.floor(totalSeconds / 3600).toInteger()
-def minutes = Math.floor((totalSeconds - (hours * 3600)) / 60).toInteger()
-def seconds = totalSeconds - (hours * 3600) - (minutes * 60)
-
-// Formatear como H.M.S con un decimal en segundos
-def durationText = ""
-if (hours > 0) { durationText += "${hours}h " }
-if (minutes > 0) { durationText += "${minutes}m " }
-durationText += String.format("%.1f", seconds) + "s"
-
-echo "Duración calculada: ${durationText}"
-
-
+    def durationText = ""
+    if (hours > 0) { durationText += "${hours}h " }
+    if (minutes > 0) { durationText += "${minutes}m " }
+    durationText += String.format("%.1f", seconds) + "s"
 
     // Determinar color y emoji según resultado
     def status = currentBuild.currentResult ?: "FAILURE"
