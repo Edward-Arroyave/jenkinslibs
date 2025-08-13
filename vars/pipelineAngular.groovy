@@ -92,14 +92,15 @@ def call(Map config) {
                         buildNumber: env.BUILD_NUMBER,
                         buildUrl: env.BUILD_URL
                     ])
+                  }
             }
             failure {
                 echo '💥 ERROR DURANTE EL DESPLIEGUE'
             }
             always {
-                script {
+                s
                                   cleanWs()
-                }
+            
             }
         }
     }
