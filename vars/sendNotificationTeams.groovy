@@ -8,6 +8,8 @@ def call (Map config) {
         status: 'Success',
         message: messageText,
         adaptiveCards: true,
+        color: "00FF00", 
+         
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
             [name: "Commit Author", template:env.COMMIT_AUTHOR],
