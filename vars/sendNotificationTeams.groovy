@@ -1,9 +1,28 @@
-def call (Map config) {
+// File: sendNotificationTeams.groovy
 
-    echo "📢 Enviando notificación de éxito a Microsoft Teams"
+def call(Map config) {
 
-    def durationMillis = currentBuild.duration
-    def totalSeconds = (durationMillis / 1000).toInteger()
+    echo "📢 Enviando notificación a Microsoft Teams"
+
+    // Determinar color, emoji y texto según el resultado
+    def status = currentBuild.currentResult ?: "FAILURE"
+    def color = "FF0000"  // rojo por defecto
+    def emoji = "❌"
+    def statusText = "Build Failed"
+
+    if (status == "SUCCESS") {
+        color = "00FF00"  // verde
+        emoji = "✅"
+        statusText = "Build Succeeded"
+    } else if (status == "UNSTABLE") {
+        color = "FFFF00"  // amarillo
+        emoji = "⚠️"
+        statusText = "Build Unstable"
+    }
+
+    // Calcular duración de manera segura
+    def durationMillis = currentBuild.duration ?: 0
+    def totalSeconds = (durationMillis / 1000).toBigInteger()
     def seconds = totalSeconds % 60
     def minutes = (totalSeconds / 60) % 60
     def hours = (totalSeconds / 3600)
@@ -13,19 +32,20 @@ def call (Map config) {
     if (minutes > 0) { durationText += "${minutes}m " }
     durationText += "${seconds}s"
 
+    // Enviar notificación
     office365ConnectorSend(
-        status: currentBuild.currentResult,
-        message: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+        status: status,
+        message: "${emoji} ${statusText}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
         adaptiveCards: true,
-        color: "FF0000",
+        color: color,
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
             [name: "Commit Author", template: env.COMMIT_AUTHOR],
             [name: "Commit Message", template: env.COMMIT_MESSAGE],
             [name: "Commit Hash", template: env.COMMIT_HASH],
-            [name: "Build", template: env.BUILD_NUMBER],
+            [name: "Build Number", template: env.BUILD_NUMBER],
             [name: "Remarks", template: currentBuild.fullDisplayName],
-            [name: "DeployTime", template: durationText]
+            [name: "Deploy Time", template: durationText]
         ]
     )
 }
