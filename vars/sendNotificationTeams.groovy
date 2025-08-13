@@ -27,7 +27,7 @@ def call(Map config) {
         adaptiveCards: true,
         color: color,
         factDefinitions: [
-            [name: "Build triggered by", template: "${env.BUILD_USER'}"],
+            [name: "Build triggered by", template: "${env.BUILD_USER}"],
             [name: "Commit Author", template: "${env.COMMIT_AUTHOR }"],
             [name: "Commit Message", template: "${env.COMMIT_MESSAGE}"],
             [name: "Commit Hash", template: "${env.COMMIT_HASH}"],
