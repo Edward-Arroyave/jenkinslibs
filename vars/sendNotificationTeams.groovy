@@ -4,7 +4,7 @@ def call (Map config) {
     
     office365ConnectorSend(
         status: 'Failure',
-        message: messageText,
+        message: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
         adaptiveCards: true,
         color:"FF0000",
         factDefinitions: [
