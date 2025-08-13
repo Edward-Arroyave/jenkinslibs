@@ -2,23 +2,23 @@
 
 def call(Map config) {
 
-    // Duración de la build en formato legible
-    def durationMillis = currentBuild.duration
+    // Duración de la build en milisegundos
+    def durationMillis = currentBuild.duration ?: 0
     def durationText = ""
 
-    if (durationMillis != null && durationMillis > 0) {
+    if (durationMillis > 0) {
+        // Convertir manualmente sin usar mod()
         def totalSeconds = (durationMillis / 1000).toInteger()
-        def seconds = totalSeconds % 60
-        def totalMinutes = totalSeconds / 60
-        def minutes = totalMinutes % 60
-        def hours = totalMinutes / 60
+        def hours = totalSeconds / 3600
+        def minutes = (totalSeconds - (hours * 3600)) / 60
+        def seconds = totalSeconds - (hours * 3600) - (minutes * 60)
 
-        if (hours > 0) { durationText += "${hours.toInteger()}h " }
-        if (minutes > 0) { durationText += "${minutes.toInteger()}m " }
-        durationText += "${seconds.toInteger()}s"
+        if (hours > 0) { durationText += "${hours}h " }
+        if (minutes > 0) { durationText += "${minutes}m " }
+        durationText += "${seconds}s"
     } else {
-        // Si la duración es cero o negativa, solo mostrar el valor bruto
-        durationText = "${durationMillis ?: '0'} ms"
+        // Si la duración es cero o menor, mostrar valor en milisegundos
+        durationText = "${durationMillis} ms"
     }
 
     // Determinar color y emoji según resultado
@@ -28,11 +28,11 @@ def call(Map config) {
     def statusText = "Build Failed"
 
     if (status == "SUCCESS") {
-        color = "00FF00"      // verde
+        color = "00FF00"
         emoji = "✅"
         statusText = "Build Succeeded"
     } else if (status == "UNSTABLE") {
-        color = "FFFF00"      // amarillo
+        color = "FFFF00"
         emoji = "⚠️"
         statusText = "Build Unstable"
     }
