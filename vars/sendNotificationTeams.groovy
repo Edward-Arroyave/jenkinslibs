@@ -10,7 +10,7 @@ def call (Map config) {
         adaptiveCards: true,
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
-            [name: "Commit Author", env.COMMIT_AUTHOR],
+            [name: "Commit Author", template:env.COMMIT_AUTHOR],
             [name: "Commit Message", template: env.COMMIT_MESSAGE],
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
