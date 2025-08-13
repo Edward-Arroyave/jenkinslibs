@@ -15,7 +15,7 @@ def call (Map config) {
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
         ]
-         potentialAction: [
+        potentialAction: [
         [
             "@type": "OpenUri",
             name: "View Build",
