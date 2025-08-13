@@ -45,9 +45,8 @@ def call(Map config) {
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build Number", template: env.BUILD_NUMBER],
             [name: "Remarks", template: "Started by user ${env.BUILD_USER}"],
-            [name: "Duration", template: durationText ,
+            [name: "Duration", template: durationText ],
         ]
     )
-
 
 }
