@@ -2,7 +2,21 @@
 
 def call(Map config) {
 
-   
+        def startMillis = currentBuild.getStartTimeInMillis()
+        def endMillis = currentBuild.getTimeInMillis()
+        def durationMillis = endMillis - startMillis
+
+        // Convertir a horas, minutos y segundos
+        def totalSeconds = (durationMillis / 1000).toInteger()
+        def seconds = totalSeconds - ((totalSeconds / 60).toInteger() * 60)
+        def totalMinutes = (totalSeconds / 60).toInteger()
+        def minutes = totalMinutes - ((totalMinutes / 60).toInteger() * 60)
+        def hours = (totalMinutes / 60).toInteger()
+
+        def durationText = ""
+        if (hours > 0) { durationText += "${hours}h " }
+        if (minutes > 0) { durationText += "${minutes}m " }
+        durationText += "${seconds}s"
 
     // Determinar color y emoji según resultado
     def status = currentBuild.currentResult ?: "FAILURE"
@@ -33,8 +47,8 @@ def call(Map config) {
             [name: "Commit Hash", template: "${env.COMMIT_HASH}"],
             [name: "Build Number", template: "${env.BUILD_NUMBER}"],
             [name: "Remarks", template: "Started by user ${env.BUILD_USER}"],
-            [name: "Duration", template: "${currentBuild.getTimeInMillis()}"],
-            [name: "ChangesGithub", template: "${currentBuild.getChangeSets()}"],
+            [name: "Duration", template: durationText],
+         
         ]
     )
 
