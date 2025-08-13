@@ -40,6 +40,9 @@ def call(Map config) {
                 credentialsId: 'GITHUB' // Credenciales configuradas en Jenkins
             ]]
         ])
+
+        env.COMMIT_HASH =  sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+        env.COMMIT_MESSAGE =   sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
     }
 
     // Confirmación de éxito

@@ -10,10 +10,10 @@ def call (Map config) {
         adaptiveCards: true,
         factDefinitions: [
             [name: "Commit Author", template: config.deployUser],
-            [name: "Commit Message", template: config.commitMessage],
-            [name: "Commit Hash", template: config.commitHash],
+            [name: "Commit Message", template: env.COMMIT_MESSAGE],
+            [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: config.buildNumber],
-            [name: "Build URL", template: config.buildUrl]
+            [name: "Build URL", template: env.BUILD_URL]
         ]
     )
 }
