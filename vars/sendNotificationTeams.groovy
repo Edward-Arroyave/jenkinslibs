@@ -1,6 +1,6 @@
 // File name: sendSuccessNotification.groovy
 
-def sendNotificationTeams(Map config) {
+def call(Map config) {
     def messageText = "✅ Successful deployment of *${config.productName}* at ${new Date().format("HH:mm:ss")}"
 
     office365ConnectorSend(
