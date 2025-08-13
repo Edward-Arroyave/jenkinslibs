@@ -38,5 +38,4 @@ def call(Map config) {
         ]
     )
 
-    echo "📢 Notificación enviada: ${statusText} (${durationText})"
 }
