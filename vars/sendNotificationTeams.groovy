@@ -10,7 +10,7 @@ def call (Map config) {
         adaptiveCards: true,
         color:"FF0000",
         sendAsAdaptiveCard: true,
-        themeColor: "FF0000"
+        themeColor: "FF0000",
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
             [name: "Commit Author", template:env.COMMIT_AUTHOR],
