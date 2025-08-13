@@ -41,8 +41,14 @@ def call(Map config) {
             ]]
         ])
 
-        env.COMMIT_HASH =  sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-        env.COMMIT_MESSAGE =   sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+        def lastCommit = sh(script: "git log -1 --pretty='%H|%an|%s'", returnStdout: true).trim()
+        def (hash, author, message) = lastCommit.split("\\|")
+        env.COMMIT_HASH = hash
+        env.COMMIT_AUTHOR = author
+        env.COMMIT_MESSAGE = message
+
+        echo "🔍 Último commit: ${env.COMMIT_HASH} por ${env.COMMIT_AUTHOR} - ${env.COMMIT_MESSAGE}"
+
     }
 
     // Confirmación de éxito
