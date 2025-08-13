@@ -34,7 +34,7 @@ def call(Map config) {
             [name: "Build Number", template: "${env.BUILD_NUMBER}"],
             [name: "Remarks", template: "Started by user ${env.BUILD_USER}"],
             [name: "Duration", template: "${currentBuild.getTimeInMillis()}"],
-            [name: "ChangesGithub", template: "${currentBuild.changeSets()}"],
+            [name: "ChangesGithub", template: "${currentBuild.getChangeSets()}"],
         ]
     )
 
