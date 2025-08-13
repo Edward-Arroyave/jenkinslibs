@@ -9,8 +9,6 @@ def call (Map config) {
         message: messageText,
         adaptiveCards: true,
         color:"FF0000",
-        sendAsAdaptiveCard: true,
-        themeColor: "FF0000",
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
             [name: "Commit Author", template:env.COMMIT_AUTHOR],
