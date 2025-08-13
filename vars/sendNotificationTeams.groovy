@@ -14,7 +14,7 @@ def call (Map config) {
             [name: "Commit Message", template: env.COMMIT_MESSAGE],
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
-        ]
+        ],
         potentialAction: [
         [
             "@type": "OpenUri",
