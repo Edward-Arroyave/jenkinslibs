@@ -39,7 +39,6 @@ def call(Map config) {
 
     // Enviar notificación a Teams
     office365ConnectorSend(
-        webhookUrl: config.webhookUrl,
         status: status,
         message: "${emoji} ${statusText}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
         adaptiveCards: true,
