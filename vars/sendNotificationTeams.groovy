@@ -5,10 +5,10 @@ def call (Map config) {
 
     office365ConnectorSend(
         webhookUrl: config.webhookUrl,
-        status: 'Success',
+        status: 'Failure',
         message: messageText,
         adaptiveCards: true,
-        color: "FF0000", 
+        color:"FF0000",
 
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
