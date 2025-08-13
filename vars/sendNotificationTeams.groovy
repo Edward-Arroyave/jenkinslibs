@@ -9,22 +9,16 @@ def call (Map config) {
         message: messageText,
         adaptiveCards: true,
         color:"FF0000",
-
+        sendAsAdaptiveCard: true,
+        themeColor: "FF0000"
         factDefinitions: [
             [name: "Build triggered by", template: env.BUILD_USER],
             [name: "Commit Author", template:env.COMMIT_AUTHOR],
             [name: "Commit Message", template: env.COMMIT_MESSAGE],
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
-        ],
-        potentialAction: [
-        [
-            "@type": "OpenUri",
-            name: "View Build",
-            targets: [
-                [os: "default", uri: env.BUILD_URL]
-            ]
         ]
-    ]
+      
+    
     )
 }
