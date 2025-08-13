@@ -18,6 +18,21 @@
     //             }
 
 def call (Map config) {
+
+  echo "📢 Enviando notificación de éxito a Microsoft Teams ${currentBuild.duration}"
+    def durationMillis = currentBuild.duration
+    def seconds = (durationMillis / 1000) % 60
+    def minutes = (durationMillis / 1000 / 60) % 60
+    def hours = durationMillis / 1000 / 60 / 60
+
+    def durationText = ""
+    if (hours > 0) {
+    durationText += "${hours.toInteger()}h "
+    }
+    if (minutes > 0) {
+    durationText += "${minutes.toInteger()}m "
+    }
+    durationText += "${seconds.toInteger()}s"
     
     office365ConnectorSend(
         status: currentBuild.currentResult,
@@ -30,7 +45,8 @@ def call (Map config) {
             [name: "Commit Message", template: env.COMMIT_MESSAGE],
             [name: "Commit Hash", template: env.COMMIT_HASH],
             [name: "Build", template: env.BUILD_NUMBER],
-            [name: "Remarks", template: env.currentBuild]
+            [name: "Remarks", template: env.currentBuild],
+            [name: "DeployTime", template: durationText],
         ]
 
 
