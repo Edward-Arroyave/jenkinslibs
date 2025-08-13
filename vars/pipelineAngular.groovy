@@ -98,8 +98,8 @@ def call(Map config) {
                 echo '💥 ERROR DURANTE EL DESPLIEGUE'
             }
             always {
-                s
-                                  cleanWs()
+                
+                cleanWs()
             
             }
         }
