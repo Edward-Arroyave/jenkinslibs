@@ -16,19 +16,18 @@ def call(Map config) {
 
     // Determinar color y emoji según resultado
     def status = currentBuild.currentResult ?: "FAILURE"
-    def color = "FF0000"
-    def emoji = "❌"
-    def statusText = "Build Failed"
+    // Mapa de estados base
+    def statusMap = [
+        "SUCCESS" : [color: "00FF00", emoji: "✅", statusText: "Build Succeeded"],
+        "UNSTABLE": [color: "FFFF00", emoji: "⚠️", statusText: "Build Unstable"],
+        "ABORTED" : [color: "FFA500", emoji: "⏹️", statusText: "Build Aborted"],
+        "FAILURE" : [color: "FF0000", emoji: "❌", statusText: "Build Failed"]
+    ]
 
-    if (status == "SUCCESS") {
-        color = "00FF00"
-        emoji = "✅"
-        statusText = "Build Succeeded"
-    } else if (status == "UNSTABLE") {
-        color = "FFFF00"
-        emoji = "⚠️"
-        statusText = "Build Unstable"
-    }
+    // Valores por defecto según el estado actual
+    def (color, emoji, statusText) = statusMap[status]?.values() ?: statusMap["FAILURE"].values()
+
+   
 
     // Enviar notificación a Teams
     wrap([$class: 'BuildUser']) {
