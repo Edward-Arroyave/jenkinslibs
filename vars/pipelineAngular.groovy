@@ -23,7 +23,13 @@ def call(Map config) {
     }
 
     pipeline {
-        agent any 
+        agent {
+            docker {
+                label 'docker-node'
+                image "node:${params.NODE_VERSION}-alpine"
+                args '-u root:root'
+            }
+        }
 
         tools {
             nodejs config.NODE_VERSION
