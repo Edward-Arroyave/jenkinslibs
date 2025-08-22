@@ -26,7 +26,7 @@ def call(Map config) {
         agent {
             docker {
                 label 'docker-node'
-                image "node:${params.NODE_VERSION}-alpine"
+                image "node:${config.NODE_VERSION}-alpine"
                 args '-u root:root'
             }
         }
