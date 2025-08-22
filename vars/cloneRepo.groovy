@@ -41,6 +41,8 @@ def call(Map config) {
             ]]
         ])
 
+        sh "git config --global --add safe.directory '${config.repoPath}'"
+        
         def lastCommit = sh(script: "git log -1 --pretty='%H|%an|%s'", returnStdout: true).trim()
         def (hash, author, message) = lastCommit.split("\\|")
         env.COMMIT_HASH = hash

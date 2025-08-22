@@ -1,29 +1,25 @@
-/**
- * Pipeline para construir y desplegar una aplicación Angular.
- * 
- * @param config Map con configuración requerida para el pipeline:
- *  - BUILD_FOLDER: Carpeta base para construcción y workspace.
- *  - REPO_PATH: Ruta local donde se clona el repositorio.
- *  - DIST_PATH: Ruta donde queda el build compilado.
- *  - SITE_URL: URL del sitio (si se usa en alguna parte).
- *  - REPO_URL: URL del repositorio Git para clonar.
- *  - SERVER: Servidor FTP o destino para despliegue.
- *  - BRANCH: Rama Git que se clona.
- *  - DIST_DIR: Directorio de distribución para deploy.
- *  - NODE_VERSION: Versión de Node.js a usar para la compilación.
- *  - FILE_ENV (opcional): Archivo .env para copiar si está presente.
- *  - NG_APP_VERSION (opcional): Versión de la app Angular para usar en .env.
- */
 def call(Map config) {
 
-    def requiredParams = ['BUILD_FOLDER', 'REPO_PATH', 'DIST_PATH', 'SITE_URL', 'REPO_URL', 'SERVER', 'BRANCH', 'DIST_DIR', 'NODE_VERSION']
+    def requiredParams = ['SITE_URL', 'REPO_URL', 'SERVER', 'BRANCH', 'DIST_DIR', 'NODE_VERSION']
     def missingParams = requiredParams.findAll { !config[it] }
     if (missingParams) {
         error("❌ Error de configuración: Faltan los siguientes parámetros obligatorios: ${missingParams.join(', ')}")
     }
 
     pipeline {
-        agent any 
+        agent {
+            docker {
+                label 'docker-node'
+                image "node:${config.NODE_VERSION}"
+                args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins:/home/jenkins'
+            }
+        }
+
+        environment {
+            BUILD_FOLDER = "${env.WORKSPACE}/${env.BUILD_ID}"
+            REPO_PATH    = "${BUILD_FOLDER}/repo"
+            DIST_PATH    = "${REPO_PATH}/${config.DIST_DIR}"
+        }
 
         tools {
             nodejs config.NODE_VERSION
@@ -35,7 +31,7 @@ def call(Map config) {
                     script {
                         cloneRepo(
                             branch:  config.BRANCH,
-                            repoPath: config.REPO_PATH,
+                            repoPath: env.REPO_PATH,
                             repoUrl: config.REPO_URL
                         )
                     }
@@ -46,7 +42,7 @@ def call(Map config) {
                 steps {
                     script {
                         copyDotenvIfPresent(
-                            REPO_PATH: config.REPO_PATH,
+                            REPO_PATH: env.REPO_PATH,
                             FILE_ENV: config.FILE_ENV,
                             NG_APP_VERSION: config.NG_APP_VERSION
                         )
@@ -58,8 +54,8 @@ def call(Map config) {
                 steps {
                     script {
                         compileAngular(
-                            repoPath: config.REPO_PATH,
-                            distPath: config.DIST_PATH
+                            repoPath: env.REPO_PATH,
+                            distPath: env.DIST_PATH
                         )
                     }
                 }
@@ -69,7 +65,7 @@ def call(Map config) {
                 steps {
                     script {
                         deployAngular(
-                            repoPath: config.REPO_PATH,
+                            repoPath: env.REPO_PATH,
                             server: config.SERVER,
                             distDir: config.DIST_DIR
                         )
@@ -92,11 +88,9 @@ def call(Map config) {
                         productName: 'Angular App',
                         ENVIRONMENT: config.BRANCH
                     ])
-                  }
-
+                }
 
                 cleanWs()
-            
             }
         }
     }
