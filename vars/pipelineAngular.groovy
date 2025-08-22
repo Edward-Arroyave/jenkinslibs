@@ -10,7 +10,7 @@ def call(Map config) {
         agent {
             docker {
                 label 'docker-node'
-               
+                image "node:${config.NODE_VERSION}"
                 args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins:/home/jenkins'
             }
         }
@@ -20,11 +20,6 @@ def call(Map config) {
             REPO_PATH    = "${BUILD_FOLDER}/repo"
             DIST_PATH    = "${REPO_PATH}/${config.DIST_DIR}"
         }
-
-        tools {
-            nodejs config.NODE_VERSION
-        }
-
         stages {
             stage('Clone Repository') {
                 steps {
