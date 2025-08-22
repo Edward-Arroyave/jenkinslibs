@@ -27,7 +27,7 @@ def call(Map config) {
             docker {
                 label 'docker-node'
                 image "node:${config.NODE_VERSION}-alpine"
-                args '-u root:root'
+                 args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins:/home/jenkins'
             }
         }
 
