@@ -38,12 +38,13 @@ def call(Map config) {
             adaptiveCards: true,
             color: color,
             factDefinitions: [
-                [name: "Build triggered by", template: "${env.BUILD_USER_ID}"],
-                [name: "Enviroment", template: "${config.ENVIRONMENT}"], 
-                [name: "Commit Author", template: "${env.COMMIT_AUTHOR}"],
-                [name: "Commit Message", template: "${env.COMMIT_MESSAGE}"],
-                [name: "Commit Hash", template: "${env.COMMIT_HASH}"],
-                [name: "Duration", template: durationText],
+                [name: "📌 Estado Final", template: "**${statusText} ${emoji}**"],
+                [name: "👤 Usuario ejecutor", template: "_${env.BUILD_USER}_"],
+                [name: "🌍 Entorno", template: "**${config.ENVIRONMENT ?: 'No definido'}**"],
+                [name: "👨‍💻 Autor del Commit", template: "${env.COMMIT_AUTHOR ?: '-'}"],
+                [name: "📝 Commit", template: "${env.COMMIT_MESSAGE ?: '-'}"],
+                [name: "🔗 Hash del Commit", template: "`${env.COMMIT_HASH ?: '-'} `"],
+                [name: "⏱️ Duración", template: "` ${durationText} `"]
             ]
         )
     }
