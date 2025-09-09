@@ -78,11 +78,11 @@ def call(Map config) {
                     [name: "📌 Estado Final", template: "**${statusText} ${emoji}**"],
                     [name: "👤 Usuario ejecutor", template: "_${env.BUILD_USER}_"],
                     [name: "📧 Usuario correo", template: "_${env.BUILD_USER_EMAIL}_"],
-                    [name: "🌍 Entorno", template: "**${config.ENVIRONMENT ?: 'No definido'}**"],
-                    [name: "👨‍💻 Autor del Commit", template: "${env.COMMIT_AUTHOR ?: '-'}"],
-                    [name: "📝 Commit", template: "${env.COMMIT_MESSAGE ?: '-'}"],
-                    [name: "🔗 Hash del Commit", template: "`${env.COMMIT_HASH ?: '-'} `"],
-                    [name: "⏱️ Duración", template: "` ${durationText} `"]
+                    [name: "🌍 Entorno", template: "**${config.ENVIRONMENT}**"],
+                    [name: "👨‍💻 Autor del Commit", template: "${env.COMMIT_AUTHOR}"],
+                    [name: "📝 Commit", template: "${env.COMMIT_MESSAGE}"],
+                    [name: "🔗 Hash del Commit", template: "`${env.COMMIT_HASH} `"],
+                    [name: "⏱️ Duración", template: "`${durationText}`"]
                 ]
             )
             echo "✅ Notificación enviada exitosamente a Teams."
