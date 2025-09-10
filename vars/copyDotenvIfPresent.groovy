@@ -16,21 +16,23 @@ def call(Map config) {
         // Verificar si ya existe un .env en el repo
         def exists = sh(script: "[ -f '${envFilePath}' ] && echo 'yes' || echo 'no'", returnStdout: true).trim()
 
-        if (exists == "yes") {
-            echo "ℹ️ [INFO] El archivo .env ya existe en '${envFilePath}'. No se sobreescribirá."
-        } else {
-            echo "📦 [INFO] Copiando archivo .env desde credencial '${config.FILE_ENV}'..."
-            withCredentials([file(credentialsId: config.FILE_ENV, variable: 'ENV_SECRET_PATH')]) {
-                sh """
-                    cp "\$ENV_SECRET_PATH" "${envFilePath}"
-                """
+        withCredentials([file(credentialsId: config.FILE_ENV, variable: 'ENV_SECRET_PATH')]) {
+            if (exists == "yes") {
+                echo "🗑️ [INFO] El archivo .env ya existe en '${envFilePath}'. Será eliminado y recreado."
+                sh "rm -f '${envFilePath}'"
+            } else {
+                echo "📦 [INFO] No existía .env en '${envFilePath}'. Será creado."
             }
-            echo "✅ [ÉXITO] Archivo .env copiado correctamente."
+
+            sh """
+                cp "\$ENV_SECRET_PATH" "${envFilePath}"
+            """
+            echo "✅ [ÉXITO] Archivo .env creado/copiedo correctamente en: ${envFilePath}"
         }
 
         // Validar actualización de NG_APP_VERSION
         if (config.NG_APP_VERSION?.trim()) {
-            echo "🛠️ [ACTUALIZACIÓN] NG_APP_VERSION recibido: '${config.NG_APP_VERSION}'. Actualizando archivo .env..."
+            echo "🛠️ [ACTUALIZACIÓN] Se va a establecer NG_APP_VERSION='${config.NG_APP_VERSION}' en el archivo .env"
 
             sh """
                 if grep -qE '^\\s*NG_APP_VERSION\\s*=' "${envFilePath}"; then
@@ -42,7 +44,7 @@ def call(Map config) {
                 grep -E '^\\s*NG_APP_VERSION\\s*=' "${envFilePath}" || echo 'NG_APP_VERSION no encontrado'
             """
 
-            echo "✅ [ACTUALIZACIÓN] NG_APP_VERSION actualizado correctamente."
+            echo "✅ [ACTUALIZACIÓN] NG_APP_VERSION sobreescrito correctamente con '${config.NG_APP_VERSION}'."
         } else {
             echo "ℹ️ [INFO] No se recibió NG_APP_VERSION, se mantiene el archivo tal cual."
         }
