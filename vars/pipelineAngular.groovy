@@ -7,16 +7,14 @@ def call(Map config) {
     }
 
     pipeline {
-        agent {
-            docker {
-                label 'docker-node'
-                image "node:${config.NODE_VERSION}"
-                args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins:/home/jenkins'
-            }
+        agent any
+
+        tools {
+            nodejs "${config.NODE_VERSION}"
         }
 
         environment {
-            BUILD_FOLDER = "${env.WORKSPACE}/${env.BUILD_ID}"
+            BUILD_FOLDER = "${env.WORKSPACE}/${config.BRANCH}"
             REPO_PATH    = "${BUILD_FOLDER}/repo"
             DIST_PATH    = "${REPO_PATH}/${config.DIST_DIR}"
         }
