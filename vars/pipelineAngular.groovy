@@ -101,8 +101,7 @@ def call(Map config) {
                         productName: 'Angular App',
                         ENVIRONMENT: config.BRANCH
                     ])
-                    echo "🧹 Limpiando workspace..."
-                    cleanWs()
+                  
                 }
             }
         }
